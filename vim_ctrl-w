@@ -1,0 +1,13 @@
+vim在命令行模式下的窗开快捷键ctrl-w
+1. ctrl-w v         # 垂直分隔窗口
+2. ctrl-w s         # 水平分隔窗口
+3. ctrl-w [hjkl]    # 切换窗口focus
+4. ctrl-w x         # 切换窗口编辑缓冲区
+5. ctrl-w [HJKL]    # 移动当前窗口
+6. ctrl-w T         # 将当前窗口在新tab中打开
+7. ctrl-w |         # 将当前的垂直分隔窗口最大化
+8. ctrl-w =         # 平均当前分隔窗口
+9. ctrl-w f         # 在新窗口中打开文件
+10. ctrl-w F        # 
+11. ctrl-w gf       # 在新的tab中打开文件
+12. ctrl-w gF       #
