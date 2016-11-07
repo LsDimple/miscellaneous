@@ -1,0 +1,55 @@
+buffer是内存中的一块缓冲区，用于临时存放vim打开过的文件，用vim打开文件，该文件会被自动加入到buffer列表中，由此所有打开的文件都对应着一个buffer。
+在vim中一个buffer就是一个已载入内存的文件，buffer中永远是最新的版本，修改文件后且未保存时，修改就存在于buffer中。每个buffer都对应一个编号和名字，
+而名字为其对应的文件名，编号由vim自动分配的且具有唯一性。
+:buffers[!] 或 :ls[!] 或 :files[!]  # 列出当前的buffer列表，其中!表示列出隐藏的buffer(unlisted buffers)。
+                                    # 第一列为buffer编号，第二列为buffer状态，第三列是文件名，第四列是上次编辑的位置；
+                                    # buffer状态有如下几种：
+                                    #   -   表示非活动的缓冲区
+                                    #   a   表示当前被激活缓冲区
+                                    #   h   表示隐藏的缓冲区
+                                    #   %   表示当前缓冲区
+                                    #   #   表示交换缓冲区
+                                    #   =   表示只读缓冲区
+                                    #   +   表示已经更该的缓冲区
+                                    #   u   表示unlisted-buffer
+                                    #   x   表示缓冲区有读错误
+                                    
+:bad, :badd file-name            # 不开文件向buffer列表中添加一个文件的buffer，其参数为文件名
+
+:bd, :bdelete [file-name|num]    # 释放buffer的内存并从buffer列表中删除，关闭buffer相应的窗口，若为当前buffer，则替代显示另一个buffer。
+                                 # 其参数为文件名或buffer编号，默认当前buffer。注，实际上，buffer并没有完全删除，仅是已到了unlisted-buffer中。
+:N,Mbdelete                      # 释放从[N,M]范围内的缓冲区
+:bdelete N1,N2, ...              # 释放指定的多个缓冲区，注意参数要么都是buffer编号，要么都是文件名
+
+:bw, :bwipe,:bwipeout            # 类似于bdelte，但它真正的删除buffer，与buffer相关的一切都将被删除
+:bwipeout [file-name|num]        #
+:N,Mbwipeout
+:bwipeout N1, N2, ...         
+
+:bun, :bunload [file-name|num]   # 释放buffer的内存，但不从buffer列表中删除，关闭buffer相应的窗口，其参数为文件名或buffer编号，默认当前buffer
+:N,Munload                       # 释放从[N,M]范围内的缓冲区
+:unload N1, N2, ...              # 释放指定的多个缓冲区
+:[N]b, :[N]buffer [N]            # 编辑指定的buffer，其参数N为buffer编号，默认编辑当前buffer 
+                                 # 在命令模式中，可以输入buffer编号，然后ctrl-^，可以快速编辑指定buffer
+:[N]sb, :[N]sbuffer [N]          # 该命令与:buffer命令类似，只是打开新窗口编辑指定的buffer
+                                 # 在命令模式中，输入buffer编号，然后ctrl-w ^或ctrl-w ctrl-^，可以快速在新窗口中编辑指定buffer
+                                  
+:br, :brewind | :bf, :bfirst           # 跳转到第一个buffer
+:sbr, :sbrewind | :sbf, :sbfirst       # 同上，只是打开新窗口编辑buffer
+:bn, :bnext                            # 跳转到下一个buffer
+:sbn, :sbnext                          # 同上，只是打开新窗口编辑buffer
+:bN, :bNext | :bp, :bprevious          # 跳转到上一个buffer
+:sbN, :sbNext | :sbp, :sbprevious      # 同上，只是打开新窗口编辑buffer
+:bl, :blast                            # 跳转到最后一个buffer
+:sbl, :sblast                          # 同上，只是打开新窗口编辑buffer
+:[N]bm, :[N]bmodified [N]              # 调到被修改的buffer，其中参数N表示其后的第N个修改的buffer，默认是下一个
+:[N]sbm, :[N]sbmodified [N]            # 同上，只是打开新窗口编辑buffer
+
+:[N]unh, :[N]unhide [N] | :[N]sun, :[N]sunhide [N]    # 为每一个load的buffer打开一个相应的窗口，其中参数N表示最大打开的窗口数
+:[N]ba, :[N]ball [N] | :[N]sba, :[N}sball [N]         # 为buffer列表中的每个buffer打开一个相应的窗口，其中参数N表示最大打开的窗口数
+
+注意：以上打开新窗口的命令之前可以使用vertical(垂直打开窗口)或tab(打开新的tab)，如：vertical sbuffer file或tab sblast
+
+
+
+
