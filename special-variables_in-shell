@@ -10,4 +10,27 @@
 8. $_         # 表示上一条命令的最后一个参数
 9. ~-         # 表示上次所切换过来时的目录
 10. $-        # 表示当前shell的设置选项；如set -x; echo $-;  # 输出himxBH
-              # himBH为shell的默认值
+              # himBH为shell的默认值，使用set -o查看shell选项的设置。
+对于$-变量，其默认值为himBH，其中：
+   i - interactive         开启interactive-comments选项，表示当前是一个交互式的shell
+                           （什么是交互式shell：http://kodango.com/what-is-interactive-and-login-shell）
+   H - history expand      开启histexpand选项，shell会把执行的命令记录下来，可以通过histroy命令查看，每一行是序号+命令；
+                           在shell退出时，将这些保存到~/.bash_history文件中，在启动时也会从该文件中加载；而history expand就是
+                           展开历史列表中的命令，通过!来完成。
+   B - brace expansion     开启braceexpand选项，花括号扩展，如cp file{,.bak}
+   m - monitor mode        开启monitor选项，监视模式，可以使用作业控制，如fg等命令
+   h - hashall             开启hashall选项，记录下命令的位置
+   
+11. FUNCNAME / BASH_LINENO / BASH_SOURCE
+FUNCNAME是一个数组变量，它根据函数调用栈，保存了所有函数名字。
+数组的索引从0开始，该元素保存的是当前函数的名字，最后一个元素保存的函数名是"main"。
+
+BASH_LINENO是一个数组变量，保存的是FUNCNAME中每个相应函数在源文件中被调用时所在的行号
+
+BASH_SOURCE是一个数组变量，保存的是FUNCNAME中每个相应的函数定义在哪个源文件中
+
+${FUNCNAME[$i]}函数被定义在源文件${BASH_SOURCE[$i]}中，在源文件${BASH_SOURCE[$i+1]}中的第${BASH_LINENO[$i]}行被调用。
+
+12. LINENO
+当前行
+                 
