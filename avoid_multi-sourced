@@ -1,0 +1,71 @@
+避免多次source，主要是通过设置一个变量，在第一次source时将该变量置为非空，
+在之后source时，检查该变量是否为空，不为空则表示已经source过了。如下的方
+法使用了间接访问变量的方式，定义了一个较为特殊的变量名作为标志。
+_SOURCED_DONE_=__$(echo ${BASH_SOURCE[0]} | tr '[a-z]' '[A-Z_]')_$$__
+echo "Flag: $_SOURCED_DONE_=${!_SOURCED_DONE_}"  # 间接访问变量
+if [ -z "${!_SOURCED_DONE_}" ]; then
+    eval "$_SOURCED_DONE_=1"
+    echo "It is the first time to source script"
+else
+    echo "The script have been sourced"
+fi
+
+=================================================================
+bash中变量的间接引用：
+如：var=a_var; a_var=32;
+要获得a_var变量的值，
+方式1： ${!var}
+方式2： eval \$${var}
+要为变量间接赋值：
+eval $var=24
+
+变量间接引用的作用，它提供了一种类似C指针的功能。
+例子1：创建动态变量名，在使用source命令加载配置文件时很有用
+# ---------------------------------------
+# 这部分可单独放在文件中，通过source命令记载
+isdnMyProviderRemoteNet=172.16.0.100
+isdnYourProviderRemoteNet=10.0.0.10
+isdnOnlineService="MyProvider"
+# --------------------------------------
+remoteNet=$(eval "echo \$$(echo isdn${isdnOnlineService}RemoteNet)")
+remoteNet=$(eval "echo \$$(echo isdnMyProviderRemoteNet)")
+remoteNet=$(eval "echo \$isdnMyProviderRemoteNet")
+remoteNet=$(eval "echo $isdnMyProviderRemoteNet")
+
+例子2：
+chkMirrorArchs()
+{
+    arch="$1"
+    if [ "$(eval "echo \${$(echo get$(echo -ne $arch | 
+         set 's/^\(.\).*/\1/g' | tr 'a-z' 'A-Z'; 
+         echo $arch | sed 's/^.\(.*\)/\1/g')):-false}")" = true ]; then
+        return 0
+    else 
+        return 1
+    fi
+}
+getSparc="true"
+unset getIa64
+chkMirrorArchs sparc
+echo $?  # 0
+chkMirrorArchs Ia64
+echo $?  # 1
+
+例子3：传递一个间接引用给awk
+# 求文件中指定列的所有数字总和
+ARGS=2
+E_WRONGARGS=65
+if [ $# -ne "$ARGS" ]; then
+    echo "Usage: `basename $0` filename column-number"
+    exit $E_WRONGARGS
+fi
+filename=$1
+column_number=$2
+
+awk "
+{
+  total += \$${column_number}
+}
+END {
+  print total
+}" $filename
