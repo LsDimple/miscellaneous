@@ -1,0 +1,39 @@
+类型提升：
+在C表达式中，如果操作数类型不一致，则会隐式的进行类型提升，
+如果表达式中有char或short类型的操作数，则会被转换成int类型。
+如果没有无符号操作数，则满足以下规则：
+1) 如果有操作数long double，则其他操作数都转换为long double
+2) 否则，如果有操作数double，则其他操作都转换为double
+3) 否则，如果有操作数float，则其他操作数都转换为float
+4) 否则，转换char和short为int
+5) 然后，如果有操作数long，则将其它操作数都转换为long
+如果存在无符号数，则将有符号数转换为无符号数。
+
+例子1：
+printf("%d", sizeof('a'));      // 输出：4，（出自C专家编程）
+char ch1='a', ch2='b';
+printf("%d", sizeof(ch1));      // 输出：1
+printf("%d", sizeof(ch1+ch2));  // 输出：4
+
+例子2：
+int main(void)
+{
+    char c = 1;
+    int i = 0;
+
+    while (++i < 9) {
+        short b = c & c-1;   // 判断一个数是否为2的整数次幂
+        printf("%d : c = %d , b = %d\n",  i, c, b);
+        c <<= 1;
+    }
+
+    return 0;
+}
+该例子在i=8时，c=-128，b=-256；这是由于整数提升导致的，在c & c-1运算过程中，
+char类型的c会被提升为int类型，c=-128，实际为c=0xFFFFFF80=-128，
+而c-1=0xFFFFFF7F，所以c & c-1 = 0xFFFFFF80 & 0xFFFFFF7F = 0xFFFFFF00 = -256
+要避免上述问题，可以将c定义为int类型，由于在仅有int类型的表达式中，int不会发生类型提升。
+如：
+int a = 1; 
+a <<= 31;     // a=0x80000000
+printf("%d", a & a-1);  // 输出：0，a & a-1 = 0x80000000 & 0x7FFFFFFF = 0
