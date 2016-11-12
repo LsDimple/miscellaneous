@@ -8,9 +8,9 @@ double binomial_slow(int N, int k, double p)
 double val[128][128];
 double binomial_fast(int N, int k, double p)
 {
-    if (val[N][k] > 0) return val[N][k];
     if ((N == 0) && (k == 0)) return 1.0;
     if (N < 0 || k < 0) return 0.0;
+    if (val[N][k] > 0) return val[N][k];
     double res = (1.0 - p) * binomial(N-1, k, p) + p * binomial(N-1, k-1, p);
     val[N][k] = res;
     
