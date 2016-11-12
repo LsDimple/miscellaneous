@@ -1,0 +1,33 @@
+string reverse(string s)
+{
+    string::size_type n = s.size();
+    if (n <= 1) return s;
+    return reverse(s.substr(n/2, n)) + reverse(s.substr(0, n/2));
+}
+
+char *reverse(char *s)
+{
+    int i = -1, j = strlen(s);
+    while (++i < --j) {
+        char tmp = s[i];
+        s[i] = s[j];
+        s[j] = tmp;
+    }
+
+    return s;
+}
+
+char *reverse(char *s, int n)
+{
+    if (n <= 1) return NULL;
+    else {
+        char *p = malloc(sizeof(char)*(n+1));
+        memcpy(p, s, n);
+        memcpy(s, p+n/2, n-n/2);
+        memcpy(s+(n-n/2), p, n/2);
+        reverse(s, n-n/2);
+        reverse(s+(n-n/2), n/2);
+    }
+
+    return s;
+}
