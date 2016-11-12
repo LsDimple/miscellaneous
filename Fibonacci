@@ -1,0 +1,74 @@
+struct matrix                  // 定义2*2的矩阵
+{
+    int a[2][2];
+};
+
+matrix mul(const matrix& x, const matrix& y)  // 二阶矩阵乘法
+{
+    matrix ans;
+
+    ans.a[0][0]=x.a[0][0]*y.a[0][0]+x.a[0][1]*y.a[1][0];
+    ans.a[0][1]=x.a[0][0]*y.a[0][1]+x.a[0][1]*y.a[1][1];
+    ans.a[1][0]=x.a[1][0]*y.a[0][0]+x.a[1][1]*y.a[1][0];
+    ans.a[1][1]=x.a[1][0]*y.a[0][1]+x.a[1][1]*y.a[1][1];
+
+    return ans;
+}
+
+// 递归
+matrix matrix_power(const matrix x, long e)
+{
+    matrix ans, tmp;
+    if (e == 0) {    // 矩阵指数为0时, 返回单位矩阵
+        ans.a[0][0] = 1;
+        ans.a[0][1] = 0;
+        ans.a[1][0] = 0;
+        ans.a[1][1] = 1;
+        return ans;
+    }
+
+    if (e == 1)
+        return x;
+    tmp = matrix_power(x, e >> 1);     // X的e/2次方
+    ans = mul(tmp, tmp);
+
+    if (e & 0x1)                  // 如果e为奇数, 还要再乘以X
+        ans = mul(ans, x);
+    return ans;
+}
+
+// 非递归
+matrix matrix_power2(const matrix base, long n)
+{
+    matrix result = {{1, 0, 0, 1}};
+
+    while (n-- > 0)
+        result = mul(result, base);
+
+    return result;
+}
+ 
+/*
+ * F(n) = F(n-1) + F(n-2)
+ *
+ * |F(n), F(n-1)|列矩阵 = |1 1, 1 0|列矩阵 * |F(n-1), F(n-2)|列矩阵
+ * 递归化简后得:
+ * |F(n), F(n-1)|列矩阵 = |1 1, 1 0|^(n-1)列矩阵 * |F(1), F(0)|列矩阵
+ */
+
+int fab(int n)
+{
+    matrix base = {{
+                     {1, 1},
+                     {1, 0}
+                 }};
+
+    base = matrix_power2(base, n-1);
+    cout << base.a[0][0] + base.a[0][1] << " " << flush;
+
+    base = matrix_power3(base, n-1);
+    cout << base.a[0][0] + base.a[0][1] << " " << flush;
+    cout << endl;
+
+    return base.a[0][0] + base.a[0][1];
+}
