@@ -1,0 +1,52 @@
+${parameter}展开变量parameter
+
+变量的几种形式：
+* unset: 变量未声明或被unset命令重置
+* null: 空，即声明但未赋值，var= 或var=""
+* not null: 声明且被赋值
+
+${parameter}          # 获取变量的值
+${#paramter}          # 变量值的长度
+${!prefix*} / ${!prefix@}   # 列出所有以prefix为前缀的变量名，由IFS分隔
+
+${parameter#pattern}     # 从parameter左起，与模式pattern最短的匹配
+${parameter##pattern}    # 从parameter左起，与模式pattern最长的匹配
+
+${parameter%pattern}     # 从parameter右起，与模式pattern最短的匹配
+${paramter%%pattern}     # 从parameter右起，与模式pattern最长的匹配
+
+${parameter/pattern/string}   # 将parameter中与pattern首次匹配的部分替换为string
+${parameter//pattern/stirng}  # 将parameter中与pattern所有匹配的部分替换为string
+${parameter/#pattern/string}  # 将parameter从左起首次匹配的部分替换为string
+${parameter/%pattern/string}  # 将parameter从右起首次匹配的部分替换为string
+
+${parameter:=word}    # 若parameter为空或未声明，则返回word并将parameter赋值为word。通常用于设置默认值，: ${var:=word}
+${parameter=word}     # 若parameter为未声明，则返回word并将parameter赋值为word
+${parameter:-word}    # 若parameter为空或未声明，则返回word且parameter保持不变。通常用于设置默认值，var=${var:-word}
+${parameter-word}     # 若parameter为未声明，则返回word且parameter保持不变
+${parameter:?word}    # 若parameter为空或未声明，则将word作为错误输出到标准输出且parameter保持不变。通常用于检测变量是否被赋值
+${parameter?word}     # 若parameter为声明，则将word作为错误输出到标准输出且parameter保持不变
+${parameter:+word}    # 与:-相反，若parameter为空或未声明，则返回空，否则返回word，parameter保持不变
+${parameter+word}     # 与-相反，如parameter为未声明，则返回空，否则返回word，parameter保持不变
+
+${parameter:offset}     # 由parameter的左边起，从第offset个字符取子串直到末尾；offset可以为负数，表示从右边起，最右边字符从-1开始算起
+${parameter:offset:len} # 由parameter的左边起，从第offset个字符取len个长的子串
+
+${@:-1}   # 取位置参数中的最后一个
+${!#}     # 同上，使用间接引用方式(indirect referencing)
+
+array为一个数组，定义一个数组：
+1. array=(a b c)   # 普通数组
+2. array[0]=a      # 普通数组
+   array[1]=b
+   array[2]=c
+3. declare -a  array    # array为普通数组
+   declare -A  array    # array为关联数组
+
+${array[@]} / ${array[*]}   # 列出数组的所有元素
+${!array[@]} / ${!array[*]} # 列出数组的所有下标
+${#array[@]} / ${#array[*]} # 数组的长度
+${array} / ${array[0]}      # 对于普通数组，表示数组的第一个元素
+
+
+
