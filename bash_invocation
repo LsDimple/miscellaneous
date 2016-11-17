@@ -1,0 +1,20 @@
+登录shell：(bash -l)
+不带参数且首字符是-或带有第一个选项是--login的bash，如-bash
+对于bash需要载入的文件：/etc/profile, /.bash_profile(-> ~/.bashrc -> /etc/bashrc), ~/.bash_login, ~/.profile, $BASH_ENV
+
+交互式shell：(bash -i)
+不带非选项参数和不带-c选项的bash，且标准输入和错误都被连接到终端，或者是带-i选项的bash。交互式shell，PS1会被设置且$-会包含i，
+可以在脚本或启动文件中用于检测
+对于bash需要载入的文件：~/.bashrc(-> /etc/bashrc)
+
+交互式登录shell(bash -il)
+对于bash需要载入的文件：/etc/profile, /.bash_profile(-> ~/.bashrc -> /etc/bashrc), ~/.bash_login, ~/.profile
+非交互非登录shell(bash SCRIPT或bash -c)
+对于bash需要载入的信息：$BASH_ENV
+
+对于ssh执行远程命令，远端的sshd通过bash -c执行命令，所以是非交互非登录shell
+ssh user@ip 'echo $0'   # 返回bash，没有以-开始，表示非交互
+ssh user@ip 'echo $-'   # 返回hBc，不包含i，表示非交互
+注意，虽然ssh执行远程命令是非交互非登录shell，但在执行命令前，ssh有一次登录，此是交互式登录shell
+
+
