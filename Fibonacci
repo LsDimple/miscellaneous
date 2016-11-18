@@ -1,3 +1,4 @@
+/* 斐波那契矩阵现实 */
 struct matrix                  // 定义2*2的矩阵
 {
     int a[2][2];
@@ -71,4 +72,19 @@ int fab(int n)
     cout << endl;
 
     return base.a[0][0] + base.a[0][1];
+}
+
+===================================================
+/* 斐波那契迭代实现 */
+int fab(int n)
+{
+    int prev = 0, next = 1;
+ 
+    for (int i = 0; i < n; i++) {
+        int sum = prev + next;
+        prev = next;
+        next = sum;
+    }
+
+    return next;
 }
